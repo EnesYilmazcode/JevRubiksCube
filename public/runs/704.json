@@ -1,0 +1,516 @@
+{
+ "seed": 704,
+ "scramble": [
+  "U",
+  "B2",
+  "L2",
+  "B",
+  "L2",
+  "B2",
+  "R2",
+  "D'",
+  "F",
+  "L",
+  "U",
+  "R2",
+  "U",
+  "B'",
+  "R",
+  "F",
+  "U",
+  "B'",
+  "R2",
+  "F'"
+ ],
+ "steps": [
+  {
+   "stage": 0,
+   "title": "White cross",
+   "label": "turn the yellow side (D'), then lift the back edge sideways (D R F' R')",
+   "moves": [
+    "D'",
+    "D",
+    "L",
+    "B'",
+    "L'"
+   ],
+   "probability": 0.32,
+   "topChoice": true
+  },
+  {
+   "stage": 0,
+   "title": "White cross",
+   "label": "lift the left edge sideways (D R F' R')",
+   "moves": [
+    "D",
+    "F",
+    "L'",
+    "F'"
+   ],
+   "probability": 0.1,
+   "topChoice": false
+  },
+  {
+   "stage": 0,
+   "title": "White cross",
+   "label": "turn the yellow side (D2), then lift the right edge sideways (D R F' R')",
+   "moves": [
+    "D2",
+    "D",
+    "B",
+    "R'",
+    "B'"
+   ],
+   "probability": 0.35,
+   "topChoice": true
+  },
+  {
+   "stage": 0,
+   "title": "White cross",
+   "label": "drop the left-left middle edge to the yellow side (B D B')",
+   "moves": [
+    "B",
+    "D",
+    "B'"
+   ],
+   "probability": 0.14,
+   "topChoice": true
+  },
+  {
+   "stage": 0,
+   "title": "White cross",
+   "label": "turn the yellow side (D), then lift the front edge with a double turn",
+   "moves": [
+    "D",
+    "F2"
+   ],
+   "probability": 0.77,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side once, then R U R' U' three times on the front",
+   "moves": [
+    "D",
+    "R",
+    "D",
+    "R'",
+    "D'",
+    "R",
+    "D",
+    "R'",
+    "D'",
+    "R",
+    "D",
+    "R'",
+    "D'"
+   ],
+   "probability": 0.13,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side once",
+   "moves": [
+    "D"
+   ],
+   "probability": 0.14,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "R U R' U' once on the right",
+   "moves": [
+    "F",
+    "D",
+    "F'",
+    "D'"
+   ],
+   "probability": 0.12,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side twice, then R U R' U' five times on the left",
+   "moves": [
+    "D2",
+    "B",
+    "D",
+    "B'",
+    "D'",
+    "B",
+    "D",
+    "B'",
+    "D'",
+    "B",
+    "D",
+    "B'",
+    "D'",
+    "B",
+    "D",
+    "B'",
+    "D'",
+    "B",
+    "D",
+    "B'",
+    "D'"
+   ],
+   "probability": 0.36,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side twice, then R U R' U' five times on the right",
+   "moves": [
+    "D2",
+    "F",
+    "D",
+    "F'",
+    "D'",
+    "F",
+    "D",
+    "F'",
+    "D'",
+    "F",
+    "D",
+    "F'",
+    "D'",
+    "F",
+    "D",
+    "F'",
+    "D'",
+    "F",
+    "D",
+    "F'",
+    "D'"
+   ],
+   "probability": 0.49,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side once",
+   "moves": [
+    "D"
+   ],
+   "probability": 0.18,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "turn the yellow side back once, then R U R' U' once on the back",
+   "moves": [
+    "D'",
+    "L",
+    "D",
+    "L'",
+    "D'"
+   ],
+   "probability": 0.13,
+   "topChoice": true
+  },
+  {
+   "stage": 1,
+   "title": "White corners",
+   "label": "R U R' U' three times on the back",
+   "moves": [
+    "L",
+    "D",
+    "L'",
+    "D'",
+    "L",
+    "D",
+    "L'",
+    "D'",
+    "L",
+    "D",
+    "L'",
+    "D'"
+   ],
+   "probability": 0.73,
+   "topChoice": true
+  },
+  {
+   "stage": 2,
+   "title": "Middle layer",
+   "label": "insert right on the back",
+   "moves": [
+    "D",
+    "L",
+    "D'",
+    "L'",
+    "D'",
+    "F'",
+    "D",
+    "F"
+   ],
+   "probability": 0.36,
+   "topChoice": true
+  },
+  {
+   "stage": 2,
+   "title": "Middle layer",
+   "label": "insert right on the left",
+   "moves": [
+    "D",
+    "B",
+    "D'",
+    "B'",
+    "D'",
+    "L'",
+    "D",
+    "L"
+   ],
+   "probability": 0.71,
+   "topChoice": true
+  },
+  {
+   "stage": 2,
+   "title": "Middle layer",
+   "label": "insert right on the right",
+   "moves": [
+    "D",
+    "F",
+    "D'",
+    "F'",
+    "D'",
+    "R'",
+    "D",
+    "R"
+   ],
+   "probability": 0.63,
+   "topChoice": true
+  },
+  {
+   "stage": 2,
+   "title": "Middle layer",
+   "label": "turn the yellow side back once, then insert right on the front",
+   "moves": [
+    "D'",
+    "D",
+    "R",
+    "D'",
+    "R'",
+    "D'",
+    "B'",
+    "D",
+    "B"
+   ],
+   "probability": 0.69,
+   "topChoice": true
+  },
+  {
+   "stage": 3,
+   "title": "Yellow cross",
+   "label": "turn the yellow side back once, then F R U R' U' F'",
+   "moves": [
+    "D'",
+    "B",
+    "R",
+    "D",
+    "R'",
+    "D'",
+    "B'"
+   ],
+   "probability": 0.41,
+   "topChoice": true
+  },
+  {
+   "stage": 3,
+   "title": "Yellow cross",
+   "label": "turn the yellow side back once, then F U R U' R' F'",
+   "moves": [
+    "D'",
+    "B",
+    "D",
+    "R",
+    "D'",
+    "R'",
+    "B'"
+   ],
+   "probability": 0.49,
+   "topChoice": true
+  },
+  {
+   "stage": 4,
+   "title": "Yellow edges",
+   "label": "swap edges (R U R' U R U2 R' U) on the left",
+   "moves": [
+    "B",
+    "D",
+    "B'",
+    "D",
+    "B",
+    "D2",
+    "B'",
+    "D"
+   ],
+   "probability": 0.44,
+   "topChoice": true
+  },
+  {
+   "stage": 5,
+   "title": "Place yellow corners",
+   "label": "cycle corners on the back",
+   "moves": [
+    "D",
+    "L",
+    "D'",
+    "R'",
+    "D",
+    "L'",
+    "D'",
+    "R"
+   ],
+   "probability": 0.36,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "twist the corner the other way (R' D' R D four times)",
+   "moves": [
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U"
+   ],
+   "probability": 0.61,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "turn the yellow side once",
+   "moves": [
+    "D"
+   ],
+   "probability": 0.2,
+   "topChoice": false
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "twist the corner (R' D' R D twice)",
+   "moves": [
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U"
+   ],
+   "probability": 0.73,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "turn the yellow side back once",
+   "moves": [
+    "D'"
+   ],
+   "probability": 0.56,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "turn the yellow side back once",
+   "moves": [
+    "D'"
+   ],
+   "probability": 0.34,
+   "topChoice": false
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "twist the corner (R' D' R D twice)",
+   "moves": [
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U"
+   ],
+   "probability": 0.81,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "turn the yellow side back once",
+   "moves": [
+    "D'"
+   ],
+   "probability": 0.02,
+   "topChoice": false
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "twist the corner the other way (R' D' R D four times)",
+   "moves": [
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U",
+    "R'",
+    "U'",
+    "R",
+    "U"
+   ],
+   "probability": 0.84,
+   "topChoice": true
+  },
+  {
+   "stage": 6,
+   "title": "Twist yellow corners",
+   "label": "turn the yellow side twice",
+   "moves": [
+    "D2"
+   ],
+   "probability": 0.93,
+   "topChoice": true
+  }
+ ],
+ "stats": {
+  "calls": 69,
+  "tokens": 331303,
+  "seconds": 14,
+  "moves": 213
+ }
+}
