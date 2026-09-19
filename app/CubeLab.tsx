@@ -1,276 +1,433 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import {
-  COLOR_HEX, FACES, MOVES, SOLVED_CUBE, applyMove, applyMoves,
-  faceGrid, isSolved, makeScramble, solvedStickerCount,
-  type Face, type Move, type Sticker,
-} from "./cube";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { SOLVED_CUBE, applyMove, type Move, type Sticker } from "./cube.ts";
+import { drawCube, easeInOut, type CubeTurn, type CubeView } from "./cubeView.ts";
+import { STAGES } from "./method.ts";
+import { buildRingLayout, drawRings } from "./ringView.ts";
+import { demoScramble, solveWithJev, solveWithMethod, type AskJev, type AskStep } from "./solver.ts";
 
-type Decision = {
-  move: Move;
-  confidence: number;
-  probabilities: Record<string, number>;
-  model: string;
-  inputTokens: number;
-  latencyMs: number;
-};
+type Source = "scramble" | "jev" | "manual";
+type TapeItem = { move: Move; source: Source; probability?: number };
+type StepView = { stage: number; label: string; probability: number; from: number; to: number };
+type Phase = "ready" | "scrambling" | "scrambled" | "thinking" | "solving" | "solved" | "failed" | "error";
+type Queued = { move: Move; duration: number; gap: number; index: number };
+type Stats = { calls: number; tokens: number; ms: number; moves: number; steps: number };
+type Run = { scramble: Move[]; solution: TapeItem[]; steps: StepView[]; stats: Stats };
 
-const FACE_TRANSFORMS: Record<Face, string> = {
-  F: "translateZ(96px)", B: "rotateY(180deg) translateZ(96px)",
-  R: "rotateY(90deg) translateZ(96px)", L: "rotateY(-90deg) translateZ(96px)",
-  U: "rotateX(90deg) translateZ(96px)", D: "rotateX(-90deg) translateZ(96px)",
-};
-const MOVE_NAME = Object.fromEntries(MOVES.map((move) => [
-  move,
-  move.endsWith("'") ? `${move[0]} counterclockwise` : move.endsWith("2") ? `${move[0]} 180 degrees` : `${move} clockwise`,
-])) as Record<Move, string>;
+const HOME_VIEW: CubeView = { yaw: -0.6, pitch: 0.5 };
+const SCRAMBLE_MS = 220;
+const FAST_SCRAMBLE_MS = 100;
+const SOLVE_MS = 400;
+const SOLVE_GAP_MS = 130;
+const METHOD_MS = 140;
+const METHOD_GAP_MS = 15;
+const STEP_GAP_MS = 170;
+const SPIN_MS = 4600;
+const BEAM_WIDTH = 4;
+const MAX_DEPTH = 8;
+const PRICE_PER_TOKEN = 0.042e-6;
+/** Scrambles this long or longer are solved with Jev running the beginner's method. */
+const METHOD_MIN = 6;
+const DEPTHS = [2, 3, 4, 20];
+const STAGE_SHORT = ["Cross", "Corners", "Middle", "Yellow cross", "Yellow edges", "Place corners", "Twist corners"];
 
-function Cube3D({ stickers, moving }: { stickers: Sticker[]; moving: boolean }) {
-  const [rotation, setRotation] = useState({ x: -24, y: 34 });
-  const drag = useRef<{ x: number; y: number; rx: number; ry: number } | null>(null);
-  return (
-    <div
-      className="cube-stage"
-      aria-label="Interactive three-dimensional Rubik's Cube"
-      onPointerDown={(event) => {
-        drag.current = { x: event.clientX, y: event.clientY, rx: rotation.x, ry: rotation.y };
-        event.currentTarget.setPointerCapture(event.pointerId);
-      }}
-      onPointerMove={(event) => {
-        if (!drag.current) return;
-        setRotation({
-          x: drag.current.rx - (event.clientY - drag.current.y) * 0.35,
-          y: drag.current.ry + (event.clientX - drag.current.x) * 0.35,
-        });
-      }}
-      onPointerUp={() => { drag.current = null; }}
-      onPointerCancel={() => { drag.current = null; }}
-    >
-      <div className="cube-shadow" />
-      <div className={`cube ${moving ? "cube-moving" : ""}`} style={{ transform: `rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)` }}>
-        {FACES.map((face) => (
-          <div className="cube-face" key={face} style={{ transform: FACE_TRANSFORMS[face] }}>
-            {faceGrid(stickers, face).map((sticker) => (
-              <div className="cube-sticker" key={sticker.id} style={{ background: COLOR_HEX[sticker.color] }} />
-            ))}
-          </div>
-        ))}
-      </div>
-      <span className="stage-hint">drag to orbit</span>
-    </div>
-  );
+const ring = buildRingLayout();
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function sizeCanvas(canvas: HTMLCanvasElement) {
+  const rect = canvas.getBoundingClientRect();
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const w = Math.max(1, Math.round(rect.width * dpr)), h = Math.max(1, Math.round(rect.height * dpr));
+  if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+  const ctx = canvas.getContext("2d")!;
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  return { ctx, width: rect.width, height: rect.height };
 }
 
-type GraphNode = { sticker: Sticker; face: Face; row: number; col: number; x: number; y: number };
-
-function CubeGraph({ stickers }: { stickers: Sticker[] }) {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    const parent = canvas?.parentElement;
-    if (!canvas || !parent) return;
-    const draw = () => {
-      const size = Math.max(300, Math.min(parent.getBoundingClientRect().width, 560));
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
-      canvas.width = size * dpr;
-      canvas.height = size * dpr;
-      canvas.style.width = `${size}px`;
-      canvas.style.height = `${size}px`;
-      const ctx = canvas.getContext("2d");
-      if (!ctx) return;
-      ctx.scale(dpr, dpr);
-      ctx.clearRect(0, 0, size, size);
-      const center = size / 2;
-      const orbit = size * 0.31;
-      const cluster = size * 0.055;
-      const nodes: GraphNode[] = [];
-      const byFaceCell = new Map<string, GraphNode>();
-
-      FACES.forEach((face, faceIndex) => {
-        const angle = -Math.PI / 2 + faceIndex * Math.PI * 2 / FACES.length;
-        const cx = center + Math.cos(angle) * orbit;
-        const cy = center + Math.sin(angle) * orbit;
-        const cos = Math.cos(angle + Math.PI / 2);
-        const sin = Math.sin(angle + Math.PI / 2);
-        faceGrid(stickers, face).forEach((sticker, index) => {
-          const row = Math.floor(index / 3);
-          const col = index % 3;
-          const lx = (col - 1) * cluster;
-          const ly = (row - 1) * cluster;
-          const node = { sticker, face, row, col, x: cx + lx * cos - ly * sin, y: cy + lx * sin + ly * cos };
-          nodes.push(node);
-          byFaceCell.set(`${face}:${row}:${col}`, node);
-        });
-      });
-
-      ctx.strokeStyle = "rgba(145,154,173,.18)";
-      ctx.lineWidth = 1;
-      for (let ring = 1; ring <= 4; ring += 1) {
-        ctx.beginPath();
-        ctx.arc(center, center, size * (0.085 + ring * 0.073), 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      ctx.strokeStyle = "rgba(171,181,204,.28)";
-      for (const node of nodes) {
-        for (const [dr, dc] of [[1, 0], [0, 1]]) {
-          const neighbor = byFaceCell.get(`${node.face}:${node.row + dr}:${node.col + dc}`);
-          if (!neighbor) continue;
-          ctx.beginPath(); ctx.moveTo(node.x, node.y); ctx.lineTo(neighbor.x, neighbor.y); ctx.stroke();
-        }
-      }
-      const cubies = new Map<string, GraphNode[]>();
-      for (const node of nodes) {
-        const key = node.sticker.pos.join(",");
-        cubies.set(key, [...(cubies.get(key) || []), node]);
-      }
-      ctx.strokeStyle = "rgba(209,217,235,.2)";
-      for (const group of cubies.values()) {
-        for (let index = 1; index < group.length; index += 1) {
-          const start = group[0];
-          const end = group[index];
-          ctx.beginPath();
-          ctx.moveTo(start.x, start.y);
-          ctx.quadraticCurveTo(center + (start.x + end.x - center * 2) * .2, center + (start.y + end.y - center * 2) * .2, end.x, end.y);
-          ctx.stroke();
-        }
-      }
-      for (const node of nodes) {
-        const radius = node.row === 1 && node.col === 1 ? size * .016 : size * .012;
-        ctx.beginPath(); ctx.arc(node.x, node.y, radius + 2, 0, Math.PI * 2); ctx.fillStyle = "rgba(7,9,13,.94)"; ctx.fill();
-        ctx.beginPath(); ctx.arc(node.x, node.y, radius, 0, Math.PI * 2); ctx.fillStyle = COLOR_HEX[node.sticker.color]; ctx.fill();
-      }
-      ctx.font = `500 ${Math.max(11, size * .027)}px ui-monospace, monospace`;
-      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillStyle = "rgba(232,236,246,.72)";
-      FACES.forEach((face, index) => {
-        const angle = -Math.PI / 2 + index * Math.PI * 2 / FACES.length;
-        ctx.fillText(face, center + Math.cos(angle) * size * .43, center + Math.sin(angle) * size * .43);
-      });
-    };
-    draw();
-    const observer = new ResizeObserver(draw);
-    observer.observe(parent);
-    return () => observer.disconnect();
-  }, [stickers]);
-  return (
-    <div className="graph-stage">
-      <canvas ref={canvasRef} role="img" aria-label="All 54 cube stickers grouped by face, with graph edges joining adjacent stickers and stickers on the same cubie" />
-      <span className="stage-hint">54 sticker nodes · shared-cubie edges</span>
-    </div>
-  );
-}
-
-export default function CubeLab() {
-  const [stickers, setStickers] = useState<Sticker[]>(SOLVED_CUBE);
-  const [history, setHistory] = useState<Move[]>([]);
-  const [scramble, setScramble] = useState<Move[]>([]);
-  const [scrambleLength, setScrambleLength] = useState(7);
-  const [decision, setDecision] = useState<Decision | null>(null);
-  const [status, setStatus] = useState("Ready for a scramble");
-  const [moving, setMoving] = useState(false);
-  const [asking, setAsking] = useState(false);
-  const [autoRunning, setAutoRunning] = useState(false);
-  const [totalTokens, setTotalTokens] = useState(0);
-  const stateRef = useRef(stickers);
-  const historyRef = useRef(history);
-  useEffect(() => { stateRef.current = stickers; }, [stickers]);
-  useEffect(() => { historyRef.current = history; }, [history]);
-  const score = solvedStickerCount(stickers);
-  const solved = isSolved(stickers);
-
-  const moveCube = useCallback((move: Move, source = "Manual move") => {
-    setMoving(true);
-    setStickers((current) => applyMove(current, move));
-    setHistory((current) => [...current, move]);
-    setStatus(`${source}: ${MOVE_NAME[move]}`);
-    window.setTimeout(() => setMoving(false), 280);
-  }, []);
-
-  const reset = useCallback(() => {
-    setStickers(SOLVED_CUBE); setHistory([]); setScramble([]); setDecision(null);
-    setTotalTokens(0); setAutoRunning(false); setStatus("Solved state restored");
-  }, []);
-  const scrambleCube = useCallback(() => {
-    const moves = makeScramble(scrambleLength);
-    setStickers(applyMoves(SOLVED_CUBE, moves)); setHistory([]); setScramble(moves);
-    setDecision(null); setTotalTokens(0); setStatus(`${scrambleLength}-move scramble loaded`);
-  }, [scrambleLength]);
-
-  const askJev = useCallback(async (): Promise<boolean> => {
-    if (asking || isSolved(stateRef.current)) return false;
-    setAsking(true); setStatus("Jev is comparing 18 legal rotations…");
-    const started = performance.now();
+// The route retries Jev's 503 bursts itself; the client only retries a few times more, briefly.
+async function postJev(body: unknown) {
+  for (let attempt = 0; ; attempt += 1) {
     try {
       const response = await fetch("/api/jev", {
         method: "POST", headers: { "content-type": "application/json" },
-        body: JSON.stringify({ stickers: stateRef.current, history: historyRef.current.slice(-8) }),
+        body: JSON.stringify(body), signal: AbortSignal.timeout(30_000),
       });
-      const body = await response.json();
-      if (!response.ok) throw new Error(body.error || "Jev request failed");
-      const next: Decision = { ...body, latencyMs: Math.round(performance.now() - started) };
-      setDecision(next); setTotalTokens((value) => value + next.inputTokens); moveCube(next.move, "Jev chose");
-      return true;
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.error || "Jev request failed");
+      return data;
     } catch (error) {
-      setStatus(error instanceof Error ? error.message : "Jev request failed");
-      return false;
-    } finally { setAsking(false); }
-  }, [asking, moveCube]);
+      if (attempt >= 4) throw error;
+      await sleep(400 + attempt * 600);
+    }
+  }
+}
+
+export default function CubeLab() {
+  const cubeRef = useRef<HTMLCanvasElement>(null);
+  const ringRef = useRef<HTMLCanvasElement>(null);
+  const engine = useRef({
+    stickers: SOLVED_CUBE as Sticker[],
+    queue: [] as Queued[],
+    current: null as (Queued & { start: number }) | null,
+    pauseUntil: 0,
+    view: { ...HOME_VIEW },
+    spinStart: -1,
+    dirty: true,
+    waiters: [] as (() => void)[],
+  });
+  const [phase, setPhase] = useState<Phase>("ready");
+  const [depth, setDepth] = useState(20);
+  const [tape, setTapeState] = useState<TapeItem[]>([]);
+  const tapeRef = useRef<TapeItem[]>([]);
+  const setTape = useCallback((next: TapeItem[]) => { tapeRef.current = next; setTapeState(next); }, []);
+  const [steps, setSteps] = useState<StepView[]>([]);
+  const [active, setActive] = useState(-1);
+  const [animating, setAnimating] = useState(false);
+  const [calls, setCalls] = useState(0);
+  const [stats, setStats] = useState<Stats | null>(null);
+  const [message, setMessage] = useState("");
+  const [chrome, setChrome] = useState(true);
+  const lastRun = useRef<Run | null>(null);
+  const [canReplay, setCanReplay] = useState(false);
+  const methodMode = tape.filter((item) => item.source !== "jev").length >= METHOD_MIN || (tape.length === 0 && depth >= METHOD_MIN);
+  const busy = phase === "scrambling" || phase === "thinking" || phase === "solving";
+  // ?speed=0.25 slows every animation for recording or inspection
+  const speed = useRef(1);
+  useEffect(() => {
+    const value = Number(new URLSearchParams(window.location.search).get("speed"));
+    if (value > 0) speed.current = value;
+  }, []);
+
+  // One animation loop drives both canvases.
+  useEffect(() => {
+    let frame = 0;
+    const observer = new ResizeObserver(() => { engine.current.dirty = true; });
+    if (cubeRef.current) observer.observe(cubeRef.current);
+    if (ringRef.current) observer.observe(ringRef.current);
+    const tick = (now: number) => {
+      const e = engine.current;
+      if (!e.current && e.queue.length && now >= e.pauseUntil) {
+        e.current = { ...e.queue.shift()!, start: now };
+        setActive(e.current.index);
+        setAnimating(true);
+      }
+      let turn: CubeTurn = null;
+      if (e.current) {
+        const t = (now - e.current.start) / e.current.duration;
+        if (t >= 1) {
+          e.stickers = applyMove(e.stickers, e.current.move);
+          e.pauseUntil = now + e.current.gap;
+          e.current = null;
+          if (!e.queue.length) {
+            setAnimating(false);
+            e.waiters.splice(0).forEach((resolve) => resolve());
+          }
+        } else {
+          turn = { move: e.current.move, t };
+        }
+        e.dirty = true;
+      }
+      const view = { ...e.view };
+      if (e.spinStart >= 0) {
+        const s = (now - e.spinStart) / (SPIN_MS / speed.current);
+        if (s >= 1) e.spinStart = -1;
+        else { view.yaw += Math.PI * 2 * easeInOut(s); view.pitch += 0.14 * Math.sin(Math.PI * s); }
+        e.dirty = true;
+      }
+      if (e.dirty && cubeRef.current && ringRef.current) {
+        const c = sizeCanvas(cubeRef.current);
+        drawCube(c.ctx, c.width, c.height, e.stickers, view, turn);
+        const r = sizeCanvas(ringRef.current);
+        drawRings(r.ctx, r.width, r.height, ring, e.stickers, turn);
+        e.dirty = false;
+      }
+      frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => { cancelAnimationFrame(frame); observer.disconnect(); };
+  }, []);
+
+  const play = useCallback((items: Queued[]) => new Promise<void>((resolve) => {
+    const e = engine.current;
+    if (!items.length && !e.queue.length && !e.current) { resolve(); return; }
+    e.queue.push(...items.map((item) => ({ ...item, duration: item.duration / speed.current, gap: item.gap / speed.current })));
+    e.waiters.push(resolve);
+  }), []);
+
+  const resetCube = useCallback(() => {
+    const e = engine.current;
+    e.queue = []; e.current = null; e.stickers = SOLVED_CUBE; e.spinStart = -1; e.dirty = true;
+    e.waiters.splice(0).forEach((resolve) => resolve());
+    setTape([]); setSteps([]); setActive(-1); setAnimating(false); setStats(null); setCalls(0); setMessage(""); setPhase("ready");
+  }, [setTape]);
+
+  const playScramble = useCallback(async (moves: Move[]) => {
+    setTape(moves.map((move) => ({ move, source: "scramble" })));
+    setPhase("scrambling");
+    const ms = moves.length >= METHOD_MIN ? FAST_SCRAMBLE_MS : SCRAMBLE_MS;
+    await play(moves.map((move, index) => ({ move, duration: ms, gap: 40, index })));
+    setPhase("scrambled");
+  }, [play, setTape]);
+
+  const scramble = useCallback(async (length = depth) => {
+    resetCube();
+    lastRun.current = null; setCanReplay(false);
+    await playScramble(demoScramble(length));
+  }, [depth, playScramble, resetCube]);
+
+  const finish = useCallback((run: Run) => {
+    lastRun.current = run; setCanReplay(true);
+    setPhase("solved");
+    engine.current.spinStart = performance.now();
+  }, []);
+
+  // Short scrambles: Jev ranks single turns inside a small beam search, then the found line plays.
+  const solveShort = useCallback(async (start: Sticker[], began: number) => {
+    const ask: AskJev = async (stickers, moves) => {
+      const body = await postJev({ stickers, moves });
+      return { probabilities: body.probabilities, tokens: body.inputTokens ?? 0 };
+    };
+    setPhase("thinking");
+    const result = await solveWithJev(start, ask, { width: BEAM_WIDTH, maxDepth: MAX_DEPTH, onProgress: (p) => setCalls(p.calls) });
+    const moves = result.path?.length ?? 0;
+    const runStats = { calls: result.calls, tokens: result.tokens, ms: performance.now() - began, moves, steps: moves };
+    setStats(runStats);
+    if (!result.path) { setPhase("failed"); return; }
+    const base = tapeRef.current.length;
+    const solution = result.path.map((step) => ({ move: step.move, source: "jev" as const, probability: step.probability }));
+    const scrambleMoves = tapeRef.current.map((item) => item.move);
+    setTape([...tapeRef.current, ...solution]);
+    setPhase("solving");
+    await sleep(350);
+    await play(result.path.map((step, i) => ({ move: step.move, duration: SOLVE_MS, gap: SOLVE_GAP_MS, index: base + i })));
+    finish({ scramble: scrambleMoves, solution, steps: [], stats: runStats });
+  }, [finish, play, setTape]);
+
+  // Full scrambles: Jev picks every step of the beginner's method; each step plays as soon as it is chosen.
+  const solveMethod = useCallback(async (start: Sticker[], began: number) => {
+    const scrambleMoves = tapeRef.current.map((item) => item.move);
+    const views: StepView[] = [];
+    setSteps([]);
+    setPhase("solving");
+    const ask: AskStep = async (stickers, stage, macros, check) => {
+      const body = await postJev({ stickers, stage: stage.id, steps: macros.map((m) => m.id), check });
+      return { probabilities: body.probabilities, tokens: body.inputTokens ?? 0 };
+    };
+    const result = await solveWithMethod(start, ask, {
+      onProgress: (p) => setCalls(p.calls),
+      onSteps: (found) => {
+        for (const step of found) {
+          const from = tapeRef.current.length;
+          const moves = step.macro.moves;
+          setTape([...tapeRef.current, ...moves.map((move) => ({ move, source: "jev" as const, probability: step.probability }))]);
+          views.push({ stage: STAGES.indexOf(step.stage), label: step.macro.label, probability: step.probability, from, to: from + moves.length });
+          void play(moves.map((move, i) => ({ move, duration: METHOD_MS, gap: i === moves.length - 1 ? STEP_GAP_MS : METHOD_GAP_MS, index: from + i })));
+        }
+        setSteps([...views]);
+      },
+    });
+    await play([]);
+    const solution = tapeRef.current.slice(scrambleMoves.length);
+    const runStats = { calls: result.calls, tokens: result.tokens, ms: performance.now() - began, moves: solution.length, steps: views.length };
+    setStats(runStats);
+    if (!result.solved) { setMessage(STAGES.find((s) => s.id === result.failedStage)?.title ?? ""); setPhase("failed"); return; }
+    finish({ scramble: scrambleMoves, solution, steps: views, stats: runStats });
+  }, [finish, play, setTape]);
+
+  const solve = useCallback(async () => {
+    setCalls(0); setStats(null); setMessage(""); setSteps([]);
+    setPhase("thinking");
+    await play([]); // let any manual turn finish first
+    const start = engine.current.stickers;
+    const began = performance.now();
+    const scrambled = tapeRef.current.filter((item) => item.source !== "jev").length;
+    try {
+      if (scrambled >= METHOD_MIN) await solveMethod(start, began);
+      else await solveShort(start, began);
+    } catch (error) {
+      setMessage(error instanceof Error ? error.message : "Jev request failed");
+      setPhase("error");
+    }
+  }, [play, solveMethod, solveShort]);
+
+  // Replays the last solve with no Jev calls: same scramble, same moves, smooth pacing for recording.
+  const replay = useCallback(async () => {
+    const run = lastRun.current;
+    if (!run) return;
+    resetCube();
+    await playScramble(run.scramble);
+    await sleep(600);
+    const base = run.scramble.length;
+    setTape([...tapeRef.current, ...run.solution]);
+    setSteps(run.steps);
+    setStats(run.stats);
+    setPhase("solving");
+    const stepEnds = new Set(run.steps.map((s) => s.to - 1));
+    const method = run.steps.length > 0;
+    await play(run.solution.map((item, i) => ({
+      move: item.move, index: base + i,
+      duration: method ? METHOD_MS : SOLVE_MS,
+      gap: method ? (stepEnds.has(base + i) ? STEP_GAP_MS : METHOD_GAP_MS) : SOLVE_GAP_MS,
+    })));
+    finish(run);
+  }, [finish, play, playScramble, resetCube, setTape]);
+
+  const manualMove = useCallback((move: Move) => {
+    if (busy) return;
+    const index = tapeRef.current.length;
+    setTape([...tapeRef.current, { move, source: "manual" }]);
+    void play([{ move, duration: SCRAMBLE_MS, gap: 0, index }]);
+    setPhase("scrambled");
+  }, [busy, play, setTape]);
 
   useEffect(() => {
-    if (!autoRunning || asking) return;
-    if (solved) { setAutoRunning(false); setStatus(`Solved by Jev in ${history.length} moves`); return; }
-    if (history.length >= 40) { setAutoRunning(false); setStatus("Stopped at the 40-decision safety limit"); return; }
-    const timer = window.setTimeout(async () => { if (!(await askJev())) setAutoRunning(false); }, 420);
-    return () => window.clearTimeout(timer);
-  }, [askJev, asking, autoRunning, history.length, solved]);
+    const onKey = (event: KeyboardEvent) => {
+      if (event.target instanceof HTMLElement && ["INPUT", "SELECT", "TEXTAREA"].includes(event.target.tagName)) return;
+      const key = event.key.toLowerCase();
+      if (key === "h") { setChrome((value) => !value); return; }
+      if (key === " " || key === "enter") {
+        event.preventDefault();
+        if (busy) return;
+        if (phase === "scrambled" || phase === "failed" || phase === "error") void solve();
+        else void scramble();
+        return;
+      }
+      if (key === "p" && !busy && lastRun.current) { void replay(); return; }
+      if (/^[1-4]$/.test(key) && !busy) { setDepth(DEPTHS[Number(key) - 1]); return; }
+      const face = event.key.toUpperCase();
+      if ("UDRLFB".includes(face) && face.length === 1 && !event.metaKey && !event.ctrlKey) {
+        manualMove(`${face}${event.shiftKey ? "'" : ""}` as Move);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [busy, manualMove, phase, replay, scramble, solve]);
 
-  const topProbabilities = useMemo(() => decision ? Object.entries(decision.probabilities).sort((a, b) => b[1] - a[1]).slice(0, 3) : [], [decision]);
+  // Drag the cube to orbit it.
+  const drag = useRef<{ x: number; y: number; yaw: number; pitch: number } | null>(null);
+  const onPointerDown = (event: React.PointerEvent) => {
+    const view = engine.current.view;
+    drag.current = { x: event.clientX, y: event.clientY, yaw: view.yaw, pitch: view.pitch };
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+  };
+  const onPointerMove = (event: React.PointerEvent) => {
+    if (!drag.current) return;
+    const e = engine.current;
+    e.view.yaw = drag.current.yaw + (event.clientX - drag.current.x) * 0.008;
+    e.view.pitch = Math.max(-1.2, Math.min(1.2, drag.current.pitch + (event.clientY - drag.current.y) * 0.008));
+    e.dirty = true;
+  };
+  const endDrag = () => { drag.current = null; };
+  const recenter = () => { engine.current.view = { ...HOME_VIEW }; engine.current.dirty = true; };
+
+  const scrambleCount = tape.filter((item) => item.source !== "jev").length;
+  const cost = stats ? stats.tokens * PRICE_PER_TOKEN : 0;
+  const playing = phase === "scrambling" || phase === "solving";
+  const currentStep = steps.find((s) => active >= s.from && active < s.to) ?? steps.at(-1);
+  const currentStage = phase === "solved" ? STAGES.length : currentStep?.stage ?? (phase === "solving" ? 0 : -1);
+  const waitingOnJev = phase === "solving" && methodMode && !animating;
+
+  const caption = {
+    ready: methodMode
+      ? "A real 20-move scramble. Jev solves it with the beginner's method, picking every step."
+      : "A short scramble. Jev ranks single turns until the cube is solved.",
+    scrambling: "Scrambling",
+    scrambled: `Scrambled ${scrambleCount} ${scrambleCount === 1 ? "move" : "moves"}. Jev's turn.`,
+    thinking: `Jev is ranking moves${calls ? ` · ${calls} ${calls === 1 ? "call" : "calls"}` : ""}`,
+    solving: methodMode
+      ? (waitingOnJev ? `Jev is choosing the next step · ${calls} calls` : `${currentStage + 1}. ${STAGES[Math.min(STAGES.length - 1, Math.max(0, currentStage))].title}`)
+      : "Jev's solution",
+    solved: `Solved in ${stats?.moves ?? 0} ${stats?.moves === 1 ? "move" : "moves"}`,
+    failed: methodMode ? `Jev got stuck at: ${message || "a stage"}` : `No solution within ${MAX_DEPTH} moves`,
+    error: message || "Jev request failed",
+  }[phase];
+
+  const statsLine = stats && (steps.length
+    ? `${stats.moves} moves · ${stats.steps} steps picked by Jev · ${stats.calls} calls · ${(stats.ms / 1000).toFixed(0)} s · $${cost.toFixed(4)}`
+    : `${stats.calls} Jev ${stats.calls === 1 ? "call" : "calls"} · ${(stats.ms / 1000).toFixed(1)} s · $${cost < 0.001 ? cost.toFixed(5) : cost.toFixed(4)}`);
 
   return (
-    <main className="lab-shell">
-      <header className="topbar">
-        <div className="brand-lockup"><span className="brand-mark">J</span><div><p className="eyebrow">Jev decision experiment</p><h1>Can a model that only chooses solve a cube?</h1></div></div>
-        <div className={`connection-pill ${decision ? "connected" : ""}`}><span className="connection-dot" />{decision ? decision.model : "waiting for first Jev call"}</div>
+    <main className={`stage ${chrome ? "" : "clean"}`}>
+      <header className="masthead">
+        <div>
+          <h1>Jev vs. the Cube</h1>
+          <p>{methodMode ? "Jev picks every step of the beginner's method. No solver in the loop." : "Jev ranks every legal turn. No solver, no distance hints."}</p>
+        </div>
+        <span className="model-tag"><i />typesafe-ai/jev</span>
       </header>
 
-      <section className="experiment-bar" aria-label="Experiment controls">
-        <div className="scramble-control">
-          <label htmlFor="scramble-length">Scramble</label>
-          <select id="scramble-length" value={scrambleLength} onChange={(event) => setScrambleLength(Number(event.target.value))}>
-            {[3, 5, 7, 10, 15, 20].map((length) => <option key={length} value={length}>{length} moves</option>)}
-          </select>
-          <button className="button secondary" onClick={scrambleCube}>New scramble</button>
+      <section className="scene">
+        <div className="pane" onPointerDown={onPointerDown} onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerCancel={endDrag} onDoubleClick={recenter}>
+          <canvas ref={cubeRef} className="cube-canvas" aria-label="Rubik's Cube" />
         </div>
-        <div className="primary-actions">
-          <button className="button secondary" onClick={reset}>Reset</button>
-          <button className="button primary" onClick={() => void askJev()} disabled={asking || solved}>{asking ? "Choosing…" : "Ask Jev once"}</button>
-          <button className={`button ${autoRunning ? "danger" : "primary"}`} onClick={() => { setAutoRunning((value) => !value); setStatus(autoRunning ? "Auto-run stopped" : "Auto-run started · maximum 40 decisions"); }} disabled={solved}>{autoRunning ? "Stop" : "Run Jev"}</button>
+        <div className="pane">
+          <canvas ref={ringRef} className="ring-canvas" aria-label="All 54 stickers placed on the circles their layers turn along" />
         </div>
       </section>
 
-      <section className="visual-grid">
-        <article className="visual-panel"><div className="panel-heading"><div><span>01</span><h2>Physical state</h2></div><small>interactive 3D</small></div><Cube3D stickers={stickers} moving={moving} /></article>
-        <article className="visual-panel"><div className="panel-heading"><div><span>02</span><h2>Sticker graph</h2></div><small>all sides at once</small></div><CubeGraph stickers={stickers} /></article>
+      <section className="readout" aria-live="polite">
+        <p className={`caption phase-${phase}`}>
+          {(phase === "thinking" || phase === "scrambling" || waitingOnJev) && <span className="pulse" />}
+          {caption}
+        </p>
+
+        {methodMode && (phase === "solving" || phase === "solved" || phase === "failed") ? (
+          <>
+            <ol className="stages">
+              {STAGE_SHORT.map((name, i) => (
+                <li key={name} className={i < currentStage ? "done" : i === currentStage ? "now" : ""}>{name}</li>
+              ))}
+            </ol>
+            <div className="step">
+              {currentStep && phase !== "solved" ? (
+                <>
+                  <span className="step-label">{currentStep.label}</span>
+                  <ol className="tape small">
+                    {tape.slice(currentStep.from, currentStep.to).map((item, i) => {
+                      const index = currentStep.from + i;
+                      const state = index === active && playing ? "active" : index < active ? "done" : "";
+                      return <li key={index} className={`chip jev ${state}`}><b>{item.move}</b></li>;
+                    })}
+                  </ol>
+                  <span className="step-prob">Jev {Math.round(currentStep.probability * 100)}%</span>
+                </>
+              ) : phase === "solved" ? <span className="step-label">{steps.length} steps, every one chosen by Jev</span> : null}
+            </div>
+          </>
+        ) : methodMode && phase === "scrambling" ? (
+          <p className="scramble-line">{tape.map((item) => item.move).join(" ")}</p>
+        ) : (
+          <ol className="tape">
+            {tape.flatMap((item, index) => {
+              const state = index === active && playing ? "active" : index < active || (index === active && !playing) ? "done" : "";
+              const chip = (
+                <li key={index} className={`chip ${item.source} ${state}`}>
+                  <b>{item.move}</b>
+                  {item.probability !== undefined && <small>{Math.round(item.probability * 100)}%</small>}
+                </li>
+              );
+              const firstJev = item.source === "jev" && index > 0 && tape[index - 1].source !== "jev";
+              return firstJev ? [<li key={`divider-${index}`} className="divider" aria-hidden />, chip] : [chip];
+            })}
+          </ol>
+        )}
+        <p className="stats">{statsLine}</p>
       </section>
 
-      <section className="decision-strip" aria-live="polite">
-        <div className="decision-state"><i className={`state-light ${solved ? "solved" : asking ? "thinking" : ""}`} /><div><span>Current state</span><strong>{status}</strong></div></div>
-        <div className="metric"><span>Face-correct</span><strong>{score}<small>/54</small></strong></div>
-        <div className="metric"><span>Decisions</span><strong>{history.length}</strong></div>
-        <div className="metric"><span>Confidence</span><strong>{decision ? `${Math.round(decision.confidence * 100)}%` : "—"}</strong></div>
-        <div className="metric"><span>Input tokens</span><strong>{totalTokens.toLocaleString()}</strong></div>
-      </section>
-
-      <section className="move-console">
-        <div className="move-heading"><div><p className="eyebrow">Bounded action space</p><h2>18 legal rotations</h2></div><p>{scramble.length ? `Scramble: ${scramble.join(" ")}` : "Load a scramble, then let Jev choose one move at a time."}</p></div>
-        <div className="move-buttons">{MOVES.map((move) => <button key={move} className={decision?.move === move ? "selected" : ""} onClick={() => moveCube(move)} aria-label={MOVE_NAME[move]}>{move}</button>)}</div>
-        <div className="decision-detail">
-          <div className="last-choice"><span>Last Jev choice</span><strong>{decision?.move ?? "—"}</strong><small>{decision ? `${decision.latencyMs} ms round trip` : "No model decision yet"}</small></div>
-          <div className="probability-bars">{topProbabilities.length ? topProbabilities.map(([move, probability]) => <div className="probability" key={move}><span>{move.replace("_prime", "'")}</span><div><i style={{ width: `${Math.max(2, probability * 100)}%` }} /></div><b>{Math.round(probability * 100)}%</b></div>) : <p>Jev’s top three move probabilities will appear here.</p>}</div>
-          <div className="history"><span>Move history</span><p>{history.length ? history.join(" ") : "—"}</p></div>
+      <nav className="controls" aria-label="Experiment controls">
+        <div className="depth" role="group" aria-label="Scramble length">
+          <span>Scramble</span>
+          {DEPTHS.map((value) => (
+            <button key={value} className={value === depth ? "on" : ""} onClick={() => setDepth(value)} disabled={busy}>{value}</button>
+          ))}
         </div>
-      </section>
-      <footer><p>Jev sees serialized facelets and 18 candidate next states. It never sees the rendered cube.</p><p>No solver path or distance heuristic is supplied.</p></footer>
+        <button className="btn" onClick={() => void scramble()} disabled={busy}>Scramble</button>
+        <button className="btn primary" onClick={() => void solve()} disabled={busy || phase === "ready" || phase === "solved"}>Solve with Jev</button>
+        <button className="btn ghost" onClick={() => void replay()} disabled={busy || !canReplay}>Replay</button>
+        <button className="btn ghost" onClick={resetCube} disabled={busy} aria-label="Reset to solved">Reset</button>
+      </nav>
+      <p className="hint">Space: scramble / solve · P: replay last solve · 1-4: length · U D R L F B turn (Shift = prime) · H hides controls · drag to orbit</p>
     </main>
   );
 }
