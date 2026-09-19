@@ -37,3 +37,24 @@ flowchart TB
   end
   N -. all seven stages done .-> R
 ```
+
+## Results
+
+| | Solved |
+|---|---:|
+| **Jev with the beginner's method, 40 fresh 20-move scrambles** | **37 of 40** |
+| Same setup, random picks instead of Jev | 0 of 10 |
+| Jev alone, 3 moves from solved | 100% |
+| Jev alone, 4 moves from solved | 86% (43 of 50) |
+| Jev alone, 5 moves from solved | 45% |
+
+Random picks never get past the middle layer, and 8 of 10 stall on the white cross, so the solve comes from Jev's judgment. Jev's three misses got stuck on the last stage. Its solves ran 98 to 233 moves and took 6 to 73 seconds.
+
+On its own, one turn at a time, Jev can't see far enough ahead: past 3 moves from solved, the right turn and a wrong one leave the cube looking equally scrambled. That is why the method is there. People can't plan 20 moves ahead either.
+
+## What made it work
+
+- **Stopping the loop.** The first version asked Jev for one turn at a time and got stuck undoing its own move forever (`L L' L L'`), because the undo always looked closer to solved. Never revisiting a position fixed the loop but not the skill.
+- **JSON faces.** Jev read the cube best as JSON face strings. Compact strings, piece lists, and batched scores all did worse.
+- **A menu, not raw turns.** Given 234 two-turn sequences, Jev ranked the right one around #20 to #40. Given 43 standard moves plus a one-line note of where each piece sits, it put a right one in its top 3 in 10 of 10 checks.
+- **Visible progress.** The white cross cost the most calls, because an edge needs a drop, a turn, and a lift before anything matches. Splitting each edge into two one-step checkpoints took the cross from 8 of 10 at 24 calls to 10 of 10 at 6 calls.
