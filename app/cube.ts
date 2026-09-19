@@ -51,6 +51,14 @@ const MOVE_SPEC: Record<string, { axis: 0 | 1 | 2; layer: 1 | -1; quarter: 1 | -
   F: { axis: 2, layer: 1, quarter: -1 }, B: { axis: 2, layer: -1, quarter: 1 },
 };
 
+/** Axis, turning layer, and signed right-handed angle of a move, for animation. */
+export function moveGeometry(move: Move): { axis: 0 | 1 | 2; layer: 1 | -1; angle: number } {
+  const spec = MOVE_SPEC[move[0]];
+  const turns = move.endsWith("2") ? 2 : 1;
+  const direction = move.endsWith("'") ? -spec.quarter : spec.quarter;
+  return { axis: spec.axis, layer: spec.layer, angle: direction * turns * Math.PI / 2 };
+}
+
 export function applyMove(stickers: Sticker[], move: Move): Sticker[] {
   const spec = MOVE_SPEC[move[0]];
   const turns = move.endsWith("2") ? 2 : 1;
