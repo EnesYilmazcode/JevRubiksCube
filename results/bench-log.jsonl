@@ -1,0 +1,188 @@
+{"strategy":"baseline","depth":1,"seed":5,"scramble":"L","solved":true,"steps":1,"moves":"L'","revisits":0,"tokens":1794}
+{"strategy":"baseline","depth":1,"seed":3,"scramble":"B'","solved":true,"steps":1,"moves":"B","revisits":0,"tokens":1751}
+{"strategy":"baseline","depth":1,"seed":4,"scramble":"U'","solved":true,"steps":1,"moves":"U","revisits":0,"tokens":1748}
+{"strategy":"baseline","depth":1,"seed":1,"scramble":"B","solved":true,"steps":1,"moves":"B'","revisits":0,"tokens":1755}
+{"strategy":"baseline","depth":1,"seed":2,"scramble":"R","solved":true,"steps":1,"moves":"R'","revisits":0,"tokens":1782}
+{"strategy":"baseline","depth":1,"seed":7,"scramble":"L","solved":true,"steps":1,"moves":"L'","revisits":0,"tokens":1794}
+{"strategy":"baseline","depth":1,"seed":6,"scramble":"U","solved":true,"steps":1,"moves":"U'","revisits":0,"tokens":1743}
+{"strategy":"baseline","depth":1,"seed":9,"scramble":"B'","solved":true,"steps":1,"moves":"B","revisits":0,"tokens":1751}
+{"strategy":"baseline","depth":1,"seed":8,"scramble":"U'","solved":true,"steps":1,"moves":"U","revisits":0,"tokens":1748}
+{"strategy":"baseline","depth":1,"seed":10,"scramble":"R","solved":true,"steps":1,"moves":"R'","revisits":0,"tokens":1782}
+{"strategy":"baseline","depth":2,"seed":2,"scramble":"F B","solved":true,"steps":2,"moves":"F' B'","revisits":0,"tokens":3522}
+{"strategy":"baseline","depth":2,"seed":1,"scramble":"D U","solved":true,"steps":2,"moves":"U' D'","revisits":0,"tokens":3498}
+{"strategy":"baseline","depth":2,"seed":5,"scramble":"D2 U'","solved":true,"steps":2,"moves":"D2 U","revisits":0,"tokens":3488}
+{"strategy":"baseline","depth":2,"seed":4,"scramble":"F' B","solved":true,"steps":2,"moves":"B' F","revisits":0,"tokens":3487}
+{"strategy":"baseline","depth":2,"seed":6,"scramble":"F2 R'","solved":true,"steps":2,"moves":"R F2","revisits":0,"tokens":3532}
+{"strategy":"baseline","depth":2,"seed":7,"scramble":"F L2","solved":true,"steps":2,"moves":"L2 F'","revisits":0,"tokens":3555}
+{"strategy":"baseline","depth":2,"seed":9,"scramble":"F D'","solved":true,"steps":2,"moves":"D F'","revisits":0,"tokens":3539}
+{"strategy":"baseline","depth":2,"seed":8,"scramble":"U2 B2","solved":true,"steps":2,"moves":"B2 U2","revisits":0,"tokens":3481}
+{"strategy":"baseline","depth":2,"seed":10,"scramble":"U' B2","solved":true,"steps":2,"moves":"B2 U","revisits":0,"tokens":3491}
+{"strategy":"baseline","depth":2,"seed":3,"scramble":"D2 L","solved":true,"steps":2,"moves":"L' D2","revisits":0,"tokens":3543}
+{"strategy":"baseline","depth":3,"seed":1,"scramble":"D L2 B","solved":true,"steps":3,"moves":"B' L2 D'","revisits":0,"tokens":5366}
+{"strategy":"baseline","depth":3,"seed":4,"scramble":"F D' R2","solved":true,"steps":3,"moves":"R2 D F'","revisits":0,"tokens":5335}
+{"strategy":"baseline","depth":3,"seed":9,"scramble":"D' B U","solved":true,"steps":3,"moves":"U' B' D","revisits":0,"tokens":5284}
+{"strategy":"baseline","depth":4,"seed":8,"scramble":"L F' L B'","solved":true,"steps":4,"moves":"B L' F L'","revisits":0,"tokens":7164}
+{"strategy":"baseline","depth":4,"seed":1,"scramble":"B D' R2 B'","solved":false,"steps":12,"moves":"D D' D D' D D L' L L' L L' L","revisits":9,"tokens":21545}
+{"strategy":"baseline","depth":4,"seed":2,"scramble":"R U R2 U2","solved":false,"steps":12,"moves":"L L' D D' D D' D D' D D' D D'","revisits":10,"tokens":21482}
+{"strategy":"baseline","depth":4,"seed":6,"scramble":"L' U F' R","solved":true,"steps":4,"moves":"R' F U' L","revisits":0,"tokens":7103}
+{"strategy":"baseline","depth":4,"seed":10,"scramble":"L' D B' L","solved":false,"steps":12,"moves":"B L L' L L' L L' L L' L L' L","revisits":10,"tokens":21486}
+{"strategy":"baseline","depth":4,"seed":5,"scramble":"U2 F2 D2 F","solved":false,"steps":12,"moves":"F' U2 B2 D2 F F' R2 R2 R2 R2 R R'","revisits":5,"tokens":21193}
+{"strategy":"baseline","depth":4,"seed":7,"scramble":"U' D' B' D","solved":false,"steps":12,"moves":"U U' B U D D' U U' U U' D D'","revisits":7,"tokens":21491}
+{"strategy":"baseline","depth":4,"seed":9,"scramble":"U B' F R'","solved":false,"steps":12,"moves":"F' F F' F F' B F F' F F' F F'","revisits":9,"tokens":21216}
+{"strategy":"baseline","depth":4,"seed":4,"scramble":"R L' D2 L'","solved":false,"steps":12,"moves":"R' L2 B2 B2 B2 B2 B2 B2 B2 B2 B2 B2","revisits":9,"tokens":21248}
+{"strategy":"baseline","depth":4,"seed":3,"scramble":"B R U' L","solved":false,"steps":12,"moves":"L' B' U U' R' D' D D' D D' D U","revisits":6,"tokens":21555}
+{"strategy":"baseline","depth":3,"seed":1,"scramble":"D L2 B","solved":true,"steps":3,"moves":"B' L2 D'","revisits":0,"tokens":5366}
+{"strategy":"baseline","depth":3,"seed":5,"scramble":"D' B' F2","solved":true,"steps":3,"moves":"B F2 D","revisits":0,"tokens":5228}
+{"strategy":"baseline","depth":3,"seed":8,"scramble":"F U B","solved":true,"steps":3,"moves":"B' U' F'","revisits":0,"tokens":5322}
+{"strategy":"baseline","depth":3,"seed":4,"scramble":"F D' R2","solved":true,"steps":3,"moves":"R2 D F'","revisits":0,"tokens":5335}
+{"strategy":"baseline","depth":3,"seed":3,"scramble":"U D' B2","solved":true,"steps":3,"moves":"B2 U' D","revisits":0,"tokens":5233}
+{"strategy":"baseline","depth":3,"seed":9,"scramble":"D' B U","solved":true,"steps":3,"moves":"U' B' D","revisits":0,"tokens":5284}
+{"strategy":"baseline","depth":3,"seed":6,"scramble":"L2 F B2","solved":true,"steps":4,"moves":"F2 B2 F L2","revisits":0,"tokens":7098}
+{"strategy":"baseline","depth":3,"seed":12,"scramble":"D' U' B'","solved":true,"steps":3,"moves":"B D U","revisits":0,"tokens":5238}
+{"strategy":"baseline","depth":3,"seed":11,"scramble":"F' L2 D","solved":true,"steps":3,"moves":"D' L2 F","revisits":0,"tokens":5330}
+{"strategy":"baseline","depth":3,"seed":15,"scramble":"F' B2 U'","solved":true,"steps":3,"moves":"U F B2","revisits":0,"tokens":5167}
+{"strategy":"baseline","depth":3,"seed":16,"scramble":"D' U2 F2","solved":true,"steps":3,"moves":"F2 U2 D","revisits":0,"tokens":5198}
+{"strategy":"baseline","depth":3,"seed":10,"scramble":"F' L' D'","solved":false,"steps":9,"moves":"L F F' F F' F L' L L'","revisits":6,"tokens":15988}
+{"strategy":"baseline","depth":3,"seed":2,"scramble":"L B2 R'","solved":false,"steps":9,"moves":"L' L L' R R' R R' R R'","revisits":7,"tokens":16153}
+{"strategy":"baseline","depth":3,"seed":18,"scramble":"D' F L","solved":true,"steps":3,"moves":"L' F' D","revisits":0,"tokens":5265}
+{"strategy":"baseline","depth":3,"seed":20,"scramble":"D R B","solved":true,"steps":3,"moves":"B' R' D'","revisits":0,"tokens":5352}
+{"strategy":"baseline","depth":3,"seed":13,"scramble":"F' D' U","solved":false,"steps":9,"moves":"L U' D D' D D' D D' D","revisits":6,"tokens":14107}
+{"strategy":"baseline","depth":3,"seed":17,"scramble":"F' R2 U2","solved":false,"steps":9,"moves":"R2 F F2 F2 F2 F2 F2 F2 F2","revisits":6,"tokens":16236}
+{"strategy":"baseline","depth":3,"seed":14,"scramble":"D' L B2","solved":false,"steps":9,"moves":"L' D' D D' B' B B' B B'","revisits":6,"tokens":16200}
+{"strategy":"baseline","depth":3,"seed":7,"scramble":"D' L' D'","solved":false,"steps":9,"moves":"L L' L L' L L' L D D'","revisits":7,"tokens":16003}
+{"strategy":"baseline","depth":3,"seed":19,"scramble":"F' L F","solved":false,"steps":9,"moves":"L' L L' U' F F' F F' F","revisits":6,"tokens":15996}
+{"strategy":"baseline","depth":4,"seed":6,"scramble":"L' U F' R","solved":true,"steps":4,"moves":"R' F U' L","revisits":0,"tokens":7103}
+{"strategy":"baseline","depth":4,"seed":8,"scramble":"L F' L B'","solved":true,"steps":6,"moves":"L' L B L' F L'","revisits":1,"tokens":10752}
+{"strategy":"baseline","depth":4,"seed":3,"scramble":"B R U' L","solved":false,"steps":12,"moves":"L' B' U U' U U' R' D' D D D' U","revisits":5,"tokens":19774}
+{"strategy":"baseline","depth":4,"seed":4,"scramble":"R L' D2 L'","solved":false,"steps":12,"moves":"R' L2 B2 F F' F F' F F' F F' F","revisits":8,"tokens":21336}
+{"strategy":"baseline","depth":4,"seed":9,"scramble":"U B' F R'","solved":false,"steps":12,"moves":"F' F F' B F F' F F' F F' F F'","revisits":9,"tokens":21209}
+{"strategy":"baseline","depth":4,"seed":5,"scramble":"U2 F2 D2 F","solved":false,"steps":12,"moves":"F' U2 B2 D2 F F' R2 R2 R2 R2 R R'","revisits":5,"tokens":21193}
+{"strategy":"baseline","depth":4,"seed":7,"scramble":"U' D' B' D","solved":false,"steps":12,"moves":"U U' B U U' U D D' U U' U U'","revisits":7,"tokens":21491}
+{"strategy":"baseline","depth":4,"seed":10,"scramble":"L' D B' L","solved":false,"steps":12,"moves":"B L L' L L' L L' L L' L L' L","revisits":10,"tokens":21486}
+{"strategy":"baseline","depth":4,"seed":2,"scramble":"R U R2 U2","solved":false,"steps":12,"moves":"L L' D D' D D' D D' D D' D D'","revisits":10,"tokens":21482}
+{"strategy":"baseline","depth":4,"seed":13,"scramble":"U2 F B F","solved":true,"steps":3,"moves":"B' F2 U2","revisits":0,"tokens":5236}
+{"strategy":"baseline","depth":4,"seed":14,"scramble":"R D2 L2 F2","solved":true,"steps":4,"moves":"F2 L2 D2 R'","revisits":0,"tokens":7155}
+{"strategy":"baseline","depth":4,"seed":11,"scramble":"U' R' F2 U'","solved":false,"steps":12,"moves":"F2 R R' R U R R' R R' R R' R","revisits":8,"tokens":21416}
+{"strategy":"baseline","depth":4,"seed":19,"scramble":"B U2 F R'","solved":true,"steps":4,"moves":"R F' U2 B'","revisits":0,"tokens":7069}
+{"strategy":"baseline","depth":4,"seed":20,"scramble":"U2 D U' F2","solved":true,"steps":3,"moves":"F2 U' D'","revisits":0,"tokens":5229}
+{"strategy":"baseline","depth":4,"seed":12,"scramble":"L2 F2 U D","solved":false,"steps":12,"moves":"F2 U' D L2 D2 L2 L2 L2 F2 R2 D2 R2","revisits":2,"tokens":17827}
+{"strategy":"baseline","depth":4,"seed":1,"scramble":"B D' R2 B'","solved":false,"steps":12,"moves":"D D' D B B' B B' B D L' L L'","revisits":8,"tokens":17956}
+{"strategy":"baseline","depth":4,"seed":15,"scramble":"B U' L D2","solved":false,"steps":12,"moves":"U' U U' D D' D D L' L L' B' B","revisits":7,"tokens":19738}
+{"strategy":"baseline","depth":4,"seed":17,"scramble":"F' L' F2 L2","solved":false,"steps":12,"moves":"L' R' R F' F2 R' R R' R D2 F2 F2","revisits":5,"tokens":21452}
+{"strategy":"baseline","depth":4,"seed":18,"scramble":"R L B' U","solved":false,"steps":12,"moves":"B R' L' R' R L' R' R R' R R' R","revisits":6,"tokens":21502}
+{"strategy":"baseline","depth":4,"seed":16,"scramble":"D' B' L' U","solved":false,"steps":12,"moves":"B D U' U U' U U' B B' U U U'","revisits":7,"tokens":21466}
+{"strategy":"tabu","depth":3,"seed":9,"scramble":"D' B U","solved":true,"steps":3,"moves":"U' B' D","revisits":0,"tokens":4871}
+{"strategy":"tabu","depth":3,"seed":5,"scramble":"D' B' F2","solved":true,"steps":3,"moves":"B F2 D","revisits":0,"tokens":4822}
+{"strategy":"tabu","depth":3,"seed":3,"scramble":"U D' B2","solved":true,"steps":3,"moves":"B2 U' D","revisits":0,"tokens":4828}
+{"strategy":"tabu","depth":3,"seed":4,"scramble":"F D' R2","solved":true,"steps":3,"moves":"R2 D F'","revisits":0,"tokens":4905}
+{"strategy":"tabu","depth":3,"seed":8,"scramble":"F U B","solved":true,"steps":3,"moves":"B' U' F'","revisits":0,"tokens":4904}
+{"strategy":"tabu","depth":3,"seed":1,"scramble":"D L2 B","solved":true,"steps":3,"moves":"B' L2 D'","revisits":0,"tokens":4931}
+{"strategy":"tabu","depth":3,"seed":6,"scramble":"L2 F B2","solved":true,"steps":4,"moves":"F2 B2 F L2","revisits":0,"tokens":6465}
+{"strategy":"tabu","depth":3,"seed":11,"scramble":"F' L2 D","solved":true,"steps":3,"moves":"D' L2 F","revisits":0,"tokens":4907}
+{"strategy":"tabu","depth":3,"seed":12,"scramble":"D' U' B'","solved":true,"steps":3,"moves":"B D U","revisits":0,"tokens":4837}
+{"strategy":"tabu","depth":3,"seed":13,"scramble":"F' D' U","solved":true,"steps":3,"moves":"U' D F","revisits":0,"tokens":4886}
+{"strategy":"tabu","depth":3,"seed":15,"scramble":"F' B2 U'","solved":true,"steps":3,"moves":"U F B2","revisits":0,"tokens":4777}
+{"strategy":"tabu","depth":3,"seed":16,"scramble":"D' U2 F2","solved":true,"steps":3,"moves":"F2 U2 D","revisits":0,"tokens":4799}
+{"strategy":"tabu","depth":3,"seed":19,"scramble":"F' L F","solved":false,"steps":9,"moves":"L' U' F U F' L' D' U L","revisits":0,"tokens":14340}
+{"strategy":"tabu","depth":3,"seed":18,"scramble":"D' F L","solved":true,"steps":3,"moves":"L' F' D","revisits":0,"tokens":4850}
+{"strategy":"tabu","depth":3,"seed":2,"scramble":"L B2 R'","solved":false,"steps":9,"moves":"L' R B2 L' R' L R2 D2 R'","revisits":0,"tokens":14376}
+{"strategy":"tabu","depth":3,"seed":20,"scramble":"D R B","solved":true,"steps":3,"moves":"B' R' D'","revisits":0,"tokens":4916}
+{"strategy":"tabu","depth":3,"seed":10,"scramble":"F' L' D'","solved":false,"steps":9,"moves":"L F D' L' D2 L D L' F'","revisits":0,"tokens":12775}
+{"strategy":"tabu","depth":3,"seed":14,"scramble":"D' L B2","solved":false,"steps":9,"moves":"L' D' B' D B D' R' D U","revisits":0,"tokens":14445}
+{"strategy":"tabu","depth":4,"seed":6,"scramble":"L' U F' R","solved":true,"steps":4,"moves":"R' F U' L","revisits":0,"tokens":6471}
+{"strategy":"tabu","depth":4,"seed":5,"scramble":"U2 F2 D2 F","solved":false,"steps":12,"moves":"F' U2 B2 D2 R F R' F' R' F D2 F2","revisits":0,"tokens":18984}
+{"strategy":"tabu","depth":4,"seed":11,"scramble":"U' R' F2 U'","solved":false,"steps":12,"moves":"F2 R U F' R F D' F D R' F' R","revisits":0,"tokens":19100}
+{"strategy":"tabu","depth":4,"seed":13,"scramble":"U2 F B F","solved":true,"steps":3,"moves":"B' F2 U2","revisits":0,"tokens":4830}
+{"strategy":"tabu","depth":4,"seed":9,"scramble":"U B' F R'","solved":false,"steps":12,"moves":"F' B F U F' U' F B' F' R B F'","revisits":0,"tokens":18875}
+{"strategy":"tabu","depth":4,"seed":8,"scramble":"L F' L B'","solved":false,"steps":12,"moves":"L' F2 L' F' L B L' R' L R2 L' R","revisits":0,"tokens":18982}
+{"strategy":"tabu","depth":4,"seed":2,"scramble":"R U R2 U2","solved":false,"steps":12,"moves":"D U D' R F' B F L' B' L D R2","revisits":0,"tokens":17454}
+{"strategy":"tabu","depth":4,"seed":1,"scramble":"B D' R2 B'","solved":false,"steps":12,"moves":"D B D' B' D' R2 D' U D2 U' B' D'","revisits":0,"tokens":19028}
+{"strategy":"tabu","depth":4,"seed":14,"scramble":"R D2 L2 F2","solved":true,"steps":4,"moves":"F2 L2 D2 R'","revisits":0,"tokens":6515}
+{"strategy":"tabu","depth":4,"seed":12,"scramble":"L2 F2 U D","solved":false,"steps":12,"moves":"U2 R2 F2 U D' R' D R U' D' U R'","revisits":0,"tokens":18939}
+{"strategy":"tabu","depth":4,"seed":20,"scramble":"U2 D U' F2","solved":true,"steps":3,"moves":"F2 U' D'","revisits":0,"tokens":4826}
+{"strategy":"tabu","depth":4,"seed":19,"scramble":"B U2 F R'","solved":true,"steps":4,"moves":"R F' U2 B'","revisits":0,"tokens":6442}
+{"strategy":"tabu","depth":4,"seed":7,"scramble":"U' D' B' D","solved":false,"steps":12,"moves":"U R U' R' U R' U' F B F' U D","revisits":0,"tokens":17575}
+{"strategy":"tabu","depth":4,"seed":4,"scramble":"R L' D2 L'","solved":false,"steps":12,"moves":"R' L2 B2 F' L' F L R2 L R2 D' L'","revisits":0,"tokens":18947}
+{"strategy":"tabu","depth":4,"seed":10,"scramble":"L' D B' L","solved":false,"steps":12,"moves":"B L U' D U R' D' L' B2 R F L","revisits":0,"tokens":19057}
+{"strategy":"tabu","depth":4,"seed":16,"scramble":"D' B' L' U","solved":false,"steps":12,"moves":"B D U' D U D U' B2 D2 U D2 R2","revisits":0,"tokens":18762}
+{"strategy":"tabu","depth":4,"seed":3,"scramble":"B R U' L","solved":false,"steps":12,"moves":"L' B' U R' F' U F B' D' F2 D F2","revisits":0,"tokens":19175}
+{"strategy":"tabu","depth":4,"seed":15,"scramble":"B U' L D2","solved":false,"steps":12,"moves":"U' D' U L2 U' D2 U2 B D F' U' F","revisits":0,"tokens":19113}
+{"strategy":"tabu","depth":4,"seed":17,"scramble":"F' L' F2 L2","solved":false,"steps":12,"moves":"L' R' D' R D' F L D L' F' D R'","revisits":0,"tokens":17611}
+{"strategy":"tabu","depth":4,"seed":18,"scramble":"R L B' U","solved":false,"steps":12,"moves":"B R' B' R U' L' R' B R2 U R2 U'","revisits":0,"tokens":19224}
+{"strategy":"compact","depth":3,"seed":3,"scramble":"U D' B2","solved":true,"steps":3,"moves":"B2 U' D","revisits":0,"tokens":3832}
+{"strategy":"compact","depth":3,"seed":1,"scramble":"D L2 B","solved":true,"steps":3,"moves":"B' L2 D'","revisits":0,"tokens":3900}
+{"strategy":"compact","depth":3,"seed":8,"scramble":"F U B","solved":true,"steps":3,"moves":"B' U' F'","revisits":0,"tokens":3908}
+{"strategy":"compact","depth":3,"seed":5,"scramble":"D' B' F2","solved":true,"steps":3,"moves":"B F2 D","revisits":0,"tokens":3817}
+{"strategy":"compact","depth":3,"seed":13,"scramble":"F' D' U","solved":true,"steps":3,"moves":"U' D F","revisits":0,"tokens":3881}
+{"strategy":"compact","depth":3,"seed":12,"scramble":"D' U' B'","solved":true,"steps":3,"moves":"B D U","revisits":0,"tokens":3833}
+{"strategy":"compact","depth":3,"seed":4,"scramble":"F D' R2","solved":true,"steps":3,"moves":"R2 D F'","revisits":0,"tokens":3907}
+{"strategy":"compact","depth":3,"seed":15,"scramble":"F' B2 U'","solved":true,"steps":3,"moves":"U F B2","revisits":0,"tokens":3760}
+{"strategy":"compact","depth":3,"seed":16,"scramble":"D' U2 F2","solved":true,"steps":3,"moves":"F2 U2 D","revisits":0,"tokens":3809}
+{"strategy":"compact","depth":3,"seed":6,"scramble":"L2 F B2","solved":false,"steps":9,"moves":"R2 U2 F R2 F D2 R2 D2 R2","revisits":0,"tokens":10006}
+{"strategy":"compact","depth":3,"seed":18,"scramble":"D' F L","solved":true,"steps":3,"moves":"L' F' D","revisits":0,"tokens":3866}
+{"strategy":"compact","depth":3,"seed":11,"scramble":"F' L2 D","solved":false,"steps":9,"moves":"F L' F' L' F L F' D' F","revisits":0,"tokens":11348}
+{"strategy":"compact","depth":3,"seed":14,"scramble":"D' L B2","solved":false,"steps":9,"moves":"L' U L U' L' U L U L2","revisits":0,"tokens":11423}
+{"strategy":"compact","depth":3,"seed":2,"scramble":"L B2 R'","solved":true,"steps":5,"moves":"L' R L B2 L'","revisits":0,"tokens":6358}
+{"strategy":"compact","depth":3,"seed":17,"scramble":"F' R2 U2","solved":false,"steps":9,"moves":"R2 F R2 U2 R2 F2 R2 U R2","revisits":0,"tokens":11302}
+{"strategy":"compact","depth":3,"seed":10,"scramble":"F' L' D'","solved":false,"steps":9,"moves":"L F L' F' L U F U' D","revisits":0,"tokens":11279}
+{"strategy":"compact","depth":3,"seed":19,"scramble":"F' L F","solved":false,"steps":9,"moves":"L' U' F U F' U' F' U F","revisits":0,"tokens":11234}
+{"strategy":"compact","depth":4,"seed":5,"scramble":"U2 F2 D2 F","solved":true,"steps":4,"moves":"F' D2 F2 U2","revisits":0,"tokens":5061}
+{"strategy":"compact","depth":4,"seed":6,"scramble":"L' U F' R","solved":false,"steps":12,"moves":"F U' F' U' F U F U L U D U","revisits":0,"tokens":15091}
+{"strategy":"compact","depth":4,"seed":4,"scramble":"R L' D2 L'","solved":false,"steps":12,"moves":"R2 L2 R B2 R2 L2 R2 U2 L2 F2 R2 B2","revisits":0,"tokens":15117}
+{"strategy":"compact","depth":4,"seed":3,"scramble":"B R U' L","solved":false,"steps":12,"moves":"U R' U L' U B' U F R' F' U F","revisits":0,"tokens":14905}
+{"strategy":"compact","depth":4,"seed":10,"scramble":"L' D B' L","solved":false,"steps":12,"moves":"B L B L' B' U B U L U B' L'","revisits":0,"tokens":15053}
+{"strategy":"compact","depth":4,"seed":13,"scramble":"U2 F B F","solved":true,"steps":3,"moves":"B' F2 U2","revisits":0,"tokens":3844}
+{"strategy":"compact","depth":4,"seed":1,"scramble":"B D' R2 B'","solved":false,"steps":12,"moves":"U D U' D U' D U R' D' L' B D","revisits":0,"tokens":14789}
+{"strategy":"compact","depth":4,"seed":7,"scramble":"U' D' B' D","solved":false,"steps":12,"moves":"U R' U R2 U' L' U R' U F2 U R'","revisits":0,"tokens":15179}
+{"strategy":"compact","depth":4,"seed":9,"scramble":"U B' F R'","solved":false,"steps":12,"moves":"F' B F B F' U F U F' U F' U","revisits":0,"tokens":14802}
+{"strategy":"compact","depth":4,"seed":14,"scramble":"R D2 L2 F2","solved":false,"steps":12,"moves":"F2 D2 R' D2 U2 D2 F2 R' U2 D2 U2 F2","revisits":0,"tokens":13759}
+{"strategy":"compact","depth":4,"seed":12,"scramble":"L2 F2 U D","solved":false,"steps":12,"moves":"U2 R2 F2 U D' R2 F2 R2 F2 R2 F2 D2","revisits":0,"tokens":14956}
+{"strategy":"compact","depth":4,"seed":15,"scramble":"B U' L D2","solved":false,"steps":12,"moves":"U' D U D U' L' U B' U' R2 D2 R2","revisits":0,"tokens":13619}
+{"strategy":"compact","depth":4,"seed":20,"scramble":"U2 D U' F2","solved":true,"steps":3,"moves":"F2 U' D'","revisits":0,"tokens":3838}
+{"strategy":"compact","depth":4,"seed":2,"scramble":"R U R2 U2","solved":false,"steps":12,"moves":"L U L' R' U F2 U F2 L U R U","revisits":0,"tokens":15036}
+{"strategy":"compact","depth":4,"seed":17,"scramble":"F' L' F2 L2","solved":false,"steps":12,"moves":"L' R F' R' F U D U' F' U F U'","revisits":0,"tokens":13804}
+{"strategy":"compact","depth":4,"seed":8,"scramble":"L F' L B'","solved":false,"steps":12,"moves":"L' F L' F' U F U F' U D U D'","revisits":0,"tokens":14941}
+{"strategy":"compact","depth":4,"seed":18,"scramble":"R L B' U","solved":false,"steps":12,"moves":"B R' B' R2 U' L' R' U R U R2 U","revisits":0,"tokens":15151}
+{"strategy":"compact","depth":4,"seed":19,"scramble":"B U2 F R'","solved":false,"steps":12,"moves":"R F U2 F' R2 F R' F R F' R2 D2","revisits":0,"tokens":13793}
+{"strategy":"compact","depth":4,"seed":11,"scramble":"U' R' F2 U'","solved":false,"steps":12,"moves":"F2 R U F' R F U D U' D U D","revisits":0,"tokens":14929}
+{"strategy":"compact","depth":4,"seed":16,"scramble":"D' B' L' U","solved":false,"steps":12,"moves":"U' B D F U D U' D U D U' R","revisits":0,"tokens":14662}
+{"strategy":"beam4","depth":4,"seed":3,"scramble":"B R U' L","solved":true,"steps":13,"moves":"L' U R' B'","revisits":0,"tokens":20247}
+{"strategy":"beam4","depth":4,"seed":1,"scramble":"B D' R2 B'","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32582}
+{"strategy":"beam4","depth":4,"seed":4,"scramble":"R L' D2 L'","solved":true,"steps":13,"moves":"L D2 R' L","revisits":0,"tokens":20192}
+{"strategy":"beam4","depth":4,"seed":5,"scramble":"U2 F2 D2 F","solved":true,"steps":13,"moves":"F' D2 F2 U2","revisits":0,"tokens":19955}
+{"strategy":"beam4","depth":4,"seed":6,"scramble":"L' U F' R","solved":true,"steps":13,"moves":"R' F U' L","revisits":0,"tokens":20274}
+{"strategy":"beam4","depth":4,"seed":2,"scramble":"R U R2 U2","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32568}
+{"strategy":"beam4","depth":4,"seed":8,"scramble":"L F' L B'","solved":true,"steps":13,"moves":"B L' F L'","revisits":0,"tokens":20327}
+{"strategy":"beam4","depth":4,"seed":7,"scramble":"U' D' B' D","solved":true,"steps":13,"moves":"D' B D U","revisits":0,"tokens":20174}
+{"strategy":"beam4","depth":4,"seed":9,"scramble":"U B' F R'","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32259}
+{"strategy":"beam4","depth":4,"seed":11,"scramble":"U' R' F2 U'","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32444}
+{"strategy":"beam4","depth":4,"seed":13,"scramble":"U2 F B F","solved":true,"steps":9,"moves":"B' F2 U2","revisits":0,"tokens":13873}
+{"strategy":"beam4","depth":4,"seed":14,"scramble":"R D2 L2 F2","solved":true,"steps":13,"moves":"F2 L2 D2 R'","revisits":0,"tokens":20244}
+{"strategy":"beam4","depth":4,"seed":10,"scramble":"L' D B' L","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32533}
+{"strategy":"beam4","depth":4,"seed":16,"scramble":"D' B' L' U","solved":true,"steps":13,"moves":"U' L B D","revisits":0,"tokens":20123}
+{"strategy":"beam4","depth":4,"seed":15,"scramble":"B U' L D2","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32583}
+{"strategy":"beam4","depth":4,"seed":17,"scramble":"F' L' F2 L2","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32587}
+{"strategy":"beam4","depth":4,"seed":12,"scramble":"L2 F2 U D","solved":false,"steps":21,"moves":"","revisits":0,"tokens":30718}
+{"strategy":"beam4","depth":4,"seed":19,"scramble":"B U2 F R'","solved":true,"steps":13,"moves":"R F' U2 B'","revisits":0,"tokens":20095}
+{"strategy":"beam4","depth":4,"seed":18,"scramble":"R L B' U","solved":false,"steps":21,"moves":"","revisits":0,"tokens":32552}
+{"strategy":"beam4","depth":4,"seed":20,"scramble":"U2 D U' F2","solved":true,"steps":9,"moves":"F2 U' D'","revisits":0,"tokens":13969}
+{"strategy":"beam4","depth":5,"seed":2,"scramble":"B' L' B R' U'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37181}
+{"strategy":"beam4","depth":5,"seed":1,"scramble":"R2 L' F' D F","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38794}
+{"strategy":"beam4","depth":5,"seed":5,"scramble":"R2 D' F L2 U","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38620}
+{"strategy":"beam4","depth":5,"seed":4,"scramble":"B' U' F R F'","solved":true,"steps":17,"moves":"F R' F' U B","revisits":0,"tokens":26313}
+{"strategy":"beam4","depth":5,"seed":3,"scramble":"R B L' D' R'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38753}
+{"strategy":"beam4","depth":5,"seed":7,"scramble":"D' L F R2 F","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38692}
+{"strategy":"beam4","depth":5,"seed":8,"scramble":"F2 D2 U2 L2 R2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38334}
+{"strategy":"beam4","depth":5,"seed":6,"scramble":"F2 L2 D U B2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38450}
+{"strategy":"beam4","depth":5,"seed":11,"scramble":"R' L2 F' R2 U'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38940}
+{"strategy":"beam4","depth":5,"seed":9,"scramble":"R' D B2 U D2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":36853}
+{"strategy":"beam4","depth":5,"seed":10,"scramble":"B' U' R' B2 L2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37333}
+{"strategy":"beam4","depth":5,"seed":12,"scramble":"B' R' D B' L2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37205}
+{"strategy":"beam4","depth":5,"seed":13,"scramble":"U' B D L F","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37297}
+{"strategy":"beam4","depth":5,"seed":15,"scramble":"U F B U' B'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37001}
+{"strategy":"beam4","depth":5,"seed":14,"scramble":"L' R' F R2 L","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38944}
+{"strategy":"beam4","depth":5,"seed":17,"scramble":"R' U R' L2 B'","solved":true,"steps":17,"moves":"B R L2 U' R","revisits":0,"tokens":26462}
+{"strategy":"beam4","depth":5,"seed":16,"scramble":"L B' L R2 U2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37308}
+{"strategy":"beam4","depth":5,"seed":19,"scramble":"R' L U' F2 R2","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37169}
+{"strategy":"beam4","depth":5,"seed":18,"scramble":"B' D2 U' F' D'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":37009}
+{"strategy":"beam4","depth":5,"seed":20,"scramble":"B' F2 D U' L'","solved":false,"steps":25,"moves":"","revisits":0,"tokens":38430}
