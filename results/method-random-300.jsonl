@@ -1,0 +1,6 @@
+{"ranker":"random","width":3,"seed":301,"scramble":"U F' D B' L B2 L U2 R2 B R D' L2 B' R' F' R B' D' F2","solved":false,"failedStage":"cross","calls":38,"tokens":0,"steps":0,"topChoiceSteps":0,"moves":0,"seconds":0.648}
+{"ranker":"random","width":3,"seed":303,"scramble":"U F U R2 U B2 R' F D F2 U' F' R' U2 L D' R' U' B2 L'","solved":false,"failedStage":"cross","calls":38,"tokens":0,"steps":0,"topChoiceSteps":0,"moves":0,"seconds":0.646}
+{"ranker":"random","width":3,"seed":304,"scramble":"U F2 L' U F' R' U F2 D2 L' D' L' F2 R2 D B2 R U2 R2 F","solved":false,"failedStage":"cross","calls":38,"tokens":0,"steps":0,"topChoiceSteps":0,"moves":0,"seconds":0.642}
+{"ranker":"random","width":3,"seed":302,"scramble":"U F L' B D2 F' R2 F L F' R' B D' B2 L2 B' D2 F L' D","solved":false,"failedStage":"cross","calls":60,"tokens":0,"steps":2,"topChoiceSteps":0,"moves":7,"seconds":1.05}
+{"ranker":"random","width":3,"seed":300,"scramble":"U F' U R' B' L2 B' L' U2 B2 R2 F' R2 D2 F' U2 R' D F L2","solved":false,"failedStage":"cross","calls":87,"tokens":0,"steps":5,"topChoiceSteps":2,"moves":5,"seconds":1.178}
+{"ranker":"random","width":3,"seed":305,"scramble":"U F2 U' L' D' L B2 L' B U' B2 U2 R U2 B2 R' U F2 D2 B'","solved":false,"failedStage":"cross","calls":105,"tokens":0,"steps":7,"topChoiceSteps":0,"moves":17,"seconds":1.187}

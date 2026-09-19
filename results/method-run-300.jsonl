@@ -1,0 +1,2 @@
+{"ranker":"jev","width":3,"seed":300,"scramble":"U F' U R' B' L2 B' L' U2 B2 R2 F' R2 D2 F' U2 R' D F L2","solved":true,"failedStage":null,"calls":52,"tokens":246611,"steps":30,"topChoiceSteps":22,"moves":220,"seconds":100.382}
+{"ranker":"jev","width":3,"seed":301,"scramble":"U F' D B' L B2 L U2 R2 B R D' L2 B' R' F' R B' D' F2","solved":true,"failedStage":null,"calls":101,"tokens":370268,"steps":25,"topChoiceSteps":18,"moves":124,"seconds":131.373}
