@@ -2,7 +2,9 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import { MOVES, SOLVED_CUBE, applyMove, applyMoves, isSolved, moveGeometry, serializeCube } from "../app/cube.ts";
 import { buildRingLayout, beltTravel, locKey } from "../app/ringView.ts";
-import { demoScramble, solveWithJev } from "../app/solver.ts";
+import { demoScramble, solveWithJev, solveWithMethod } from "../app/solver.ts";
+import { STAGES, alg, pieceSummary, progress } from "../app/method.ts";
+import { stepRequest } from "../app/prompts.ts";
 
 const solvedFaces = serializeCube(SOLVED_CUBE);
 
@@ -81,6 +83,46 @@ test("search follows the ranking, never revisits a position, and stops on solved
   assert.ok(isSolved(applyMoves(start, result.path.map((s) => s.move))));
 });
 
+test("method menus fit Jev's 255-option limit and the algorithms keep finished layers", () => {
+  for (const stage of STAGES) assert.ok(stage.macros.length >= 2 && stage.macros.length <= 255, stage.id);
+  const rep = (t, n) => Array(n).fill(t).join(" ");
+  for (const [text, keep] of [
+    ["F R U R' U' F'", progress.firstTwo], ["R U R' U R U2 R' U", progress.firstTwo], ["U R U' L' U R' U' L", progress.firstTwo],
+    ["U R U' R' U' F' U F", (s) => progress.whiteEdges(s) === 4 && progress.whiteCorners(s) === 4],
+  ]) {
+    for (const view of [0, 1, 2, 3]) assert.ok(keep(applyMoves(SOLVED_CUBE, alg(text, view))), `${text} view ${view}`);
+  }
+  assert.equal(isSolved(applyMoves(SOLVED_CUBE, alg(rep("R' D' R D", 6)))), true);
+  assert.equal(isSolved(applyMoves(SOLVED_CUBE, alg(rep("R U R' U'", 6)))), true);
+});
+
+test("with a perfect picker, the method solves real scrambles through every stage", async () => {
+  // Oracle stands in for Jev: it scores each option by the stage's own check, so this tests the menus and
+  // the search plumbing, not Jev.
+  for (let i = 0; i < 3; i += 1) {
+    let x = 1234 + i;
+    const rand = () => ((x = (x * 1103515245 + 12345) % 2147483648) / 2147483648);
+    const start = applyMoves(SOLVED_CUBE, demoScramble(20, rand));
+    const ask = async (stickers, stage, macros) => {
+      const k = stage.checks.findIndex((c) => !c(stickers));
+      const score = (m) => (k >= 0 && stage.checks[k](applyMoves(stickers, m.moves)) ? 1 : 0.01 + Math.random() * 0.01);
+      return { probabilities: Object.fromEntries(macros.map((m) => [m.id, score(m)])), tokens: 0 };
+    };
+    const result = await solveWithMethod(start, ask, { width: 6, maxDepth: 4 });
+    assert.equal(result.solved, true, `scramble ${i} stuck at ${result.failedStage}`);
+    assert.ok(isSolved(applyMoves(start, result.steps.flatMap((s) => s.macro.moves))));
+  }
+});
+
+test("Jev's method prompt carries pieces, pattern, and one criterion per option, with no solver output", () => {
+  const start = applyMoves(SOLVED_CUBE, ["R", "U", "F"]);
+  const stage = STAGES[0];
+  const req = stepRequest(start, stage, stage.macros);
+  assert.equal(Object.keys(req.questions.step.criteria).length, stage.macros.length);
+  assert.equal(req.state.current_pieces, pieceSummary(start, stage));
+  assert.doesNotMatch(JSON.stringify(req), /distance|moves from solved|solved: true/i);
+});
+
 test("server renders the experiment shell", async () => {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
   workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
@@ -93,6 +135,6 @@ test("server renders the experiment shell", async () => {
   assert.equal(response.status, 200);
   const html = await response.text();
   assert.match(html, /Jev vs\. the Cube/);
-  assert.match(html, /Jev vs\. the Cube/);
+  assert.match(html, /beginner&#x27;s method|beginner's method/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton/);
 });
