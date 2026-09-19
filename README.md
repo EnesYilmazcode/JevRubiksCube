@@ -58,3 +58,43 @@ On its own, one turn at a time, Jev can't see far enough ahead: past 3 moves fro
 - **JSON faces.** Jev read the cube best as JSON face strings. Compact strings, piece lists, and batched scores all did worse.
 - **A menu, not raw turns.** Given 234 two-turn sequences, Jev ranked the right one around #20 to #40. Given 43 standard moves plus a one-line note of where each piece sits, it put a right one in its top 3 in 10 of 10 checks.
 - **Visible progress.** The white cross cost the most calls, because an edge needs a drop, a turn, and a lift before anything matches. Splitting each edge into two one-step checkpoints took the cross from 8 of 10 at 24 calls to 10 of 10 at 6 calls.
+
+## The video
+
+The solve was done ahead of time with Jev, then replayed at an even pace: the shortest of the 40 runs, 98 moves (86 on screen after merging back-to-back turns of the same face).
+
+The ring graph puts all 54 stickers on three families of circles, one per axis. Each face turn slides 12 stickers along one circle, and each face shows up as a cluster where two families cross. Rendered frame by frame at 1800x1200 and 60 fps.
+
+<p align="center"><img src="media/scrambled.jpg" width="400" alt="The scrambled cube"> <img src="media/solved.jpg" width="400" alt="The solved cube"></p>
+
+## Run it
+
+Needs Node.js 22.13 or newer and a [Vercel AI Gateway](https://vercel.com/ai-gateway) key.
+
+```powershell
+npm install
+$env:AI_GATEWAY_API_KEY="your-key"
+npm run dev    # http://localhost:3000
+```
+
+Pick 20 and press Space to scramble, then Space again to watch Jev solve it. P replays the last solve, H hides the controls, and dragging orbits the cube. The 2, 3, and 4 settings run Jev alone on short scrambles.
+
+To make a video, pre-solve some scrambles and render the shortest one (the dev server must be running, and ffmpeg must be installed):
+
+```powershell
+node --experimental-strip-types scripts/make-run.mjs 700-739 5
+python scripts/render.py 720 60 renders/jev-cube-720.mp4
+```
+
+| Folder | What's in it |
+|---|---|
+| [`app/`](app/) | the page, the Jev API route, the cube model, the 3D cube and ring graph, the method and the solver |
+| [`scripts/`](scripts/) | benchmarks, pre-solving runs, rendering the video |
+| [`research/`](research/) | the experiments behind the results |
+| [`results/`](results/) | raw benchmark rows |
+| [`public/runs/`](public/runs/) | every solved run from the batch of 40 |
+| [`tests/`](tests/) | cube math, ring layout, search, and the method menus (`npm test`) |
+
+## Credits
+
+Jev by [TypeSafe AI](https://www.typesafe.ai), called through the [Vercel AI Gateway](https://vercel.com/ai-gateway/models/jev). The app runs on [vinext](https://github.com/cloudflare/vinext), Next.js on Vite.
