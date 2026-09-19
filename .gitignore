@@ -41,3 +41,7 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+
+# rendered videos and frames
+/renders
+tsconfig.tsbuildinfo
