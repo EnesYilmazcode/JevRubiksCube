@@ -123,6 +123,11 @@ button { font: inherit; color: inherit; }
 
 .stage.clean .controls, .stage.clean .hint, .stage.clean .model-tag { visibility: hidden; }
 
+/* ---------- render stage (/render): cube and ring graph for video capture ---------- */
+.render-root { position: fixed; inset: 0; overflow: hidden; background: var(--paper); }
+.render-stage { position: absolute; left: 50%; top: 50%; transform-origin: center; background: var(--paper); }
+.render-cube, .render-ring { position: absolute; top: 0; }
+
 @keyframes pulse { 50% { opacity: .25; transform: scale(.7); } }
 
 @media (max-width: 860px) {
